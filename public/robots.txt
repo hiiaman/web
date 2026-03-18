@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+
+# Private — authenticated content
+Disallow: /swipe
+Disallow: /pets
+Disallow: /matches
+
+Sitemap: https://bossdatehub.com/sitemap.xml
