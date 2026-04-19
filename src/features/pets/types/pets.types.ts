@@ -56,6 +56,8 @@ export interface CandidateParams {
   opposite_gender?: boolean;
   limit?: number;
   offset?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface SwipeRequest {

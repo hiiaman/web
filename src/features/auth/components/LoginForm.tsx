@@ -7,6 +7,7 @@ import { env } from "@config/env";
 import { Button } from "@shared/components/ui/Button";
 import { Input } from "@shared/components/ui/Input";
 import { parseApiError } from "@services/api/errorHandler";
+import { locationService } from "@services/location/locationService";
 import { useLogin } from "../hooks/useLogin";
 
 export function LoginForm() {
@@ -34,6 +35,7 @@ export function LoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!captchaToken) return;
+    locationService.requestAndStore(); // must be called synchronously during user gesture for Safari
     login(
       { ...form, captcha_token: captchaToken },
       {

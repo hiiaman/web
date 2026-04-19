@@ -69,6 +69,8 @@ const vi = {
     likedEachOther: "đã thích nhau",
     sendMessage: "Gửi tin nhắn 💬",
     keepSwiping: "Tiếp tục vuốt",
+    locationBanner: "Cho phép vị trí để tìm thú cưng gần bạn",
+    allowLocation: "Cho phép",
   },
   myPets: {
     title: "Thú cưng của tôi",

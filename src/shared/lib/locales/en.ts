@@ -69,6 +69,8 @@ const en = {
     likedEachOther: "liked each other",
     sendMessage: "Send a message 💬",
     keepSwiping: "Keep swiping",
+    locationBanner: "Allow location to find pets near you",
+    allowLocation: "Allow",
   },
   myPets: {
     title: "My Pets",
