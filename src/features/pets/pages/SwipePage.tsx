@@ -17,6 +17,17 @@ export default function SwipePage() {
   const { activePetId, locationMode, radiusKm, oppositeGender, setLocationMode, setRadiusKm } =
     usePetsStore();
 
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      () => {},
+      { enableHighAccuracy: false, timeout: 10_000 },
+    );
+  }, []);
+
   const { data: candidates, isLoading, refetch } = useCandidates(
     activePetId ?? "",
     {
@@ -32,16 +43,6 @@ export default function SwipePage() {
   const { mutate: swipe, isPending: isSwiping } = useSwipe(activePetId ?? "");
   const [matchedPet, setMatchedPet] = useState<PetCandidateResponse | null>(null);
   const [refreshCooldown, setRefreshCooldown] = useState(false);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-      () => {},
-      { enableHighAccuracy: false, timeout: 10_000 },
-    );
-  }, []);
 
   const handleRefresh = useCallback(() => {
     if (refreshCooldown) return;
