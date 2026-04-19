@@ -9,7 +9,12 @@ import { API } from "@services/api/endpoints";
 export const sessionService = {
   async logout(): Promise<void> {
     try {
-      await apiClient.post(API.AUTH_LOGOUT);
+      const refreshToken = tokenService.getRefreshToken();
+      if (refreshToken) {
+        await apiClient.post(API.AUTH_LOGOUT, { refresh_token: refreshToken });
+      }
+    } catch {
+      // ignore API errors — always clear local tokens
     } finally {
       tokenService.clearTokens();
     }

@@ -19,7 +19,6 @@ export default function RegisterPage() {
   const [form, setForm] = useState({
     full_name: "",
     email: "",
-    confirmEmail: "",
     password: "",
     confirmPassword: "",
   });
@@ -52,7 +51,6 @@ export default function RegisterPage() {
     const next: Partial<typeof form> = {};
     if (!form.full_name.trim()) next.full_name = t("auth.fullName") + " is required";
     if (!form.email.trim()) next.email = t("auth.email") + " is required";
-    if (form.email !== form.confirmEmail) next.confirmEmail = t("auth.emailMismatch");
     if (form.password.length < 8) next.password = t("auth.passwordTooShort");
     if (form.password !== form.confirmPassword) next.confirmPassword = t("auth.passwordMismatch");
     setErrors(next);
@@ -100,21 +98,13 @@ export default function RegisterPage() {
                 required
               />
               <Input
-                label={t("auth.confirmEmail")}
-                type="email"
-                value={form.confirmEmail}
-                onChange={set("confirmEmail")}
-                error={errors.confirmEmail}
-                autoComplete="email"
-                required
-              />
-              <Input
                 label={t("auth.password")}
                 type="password"
                 value={form.password}
                 onChange={set("password")}
                 error={errors.password}
                 autoComplete="new-password"
+                showPasswordToggle
                 required
               />
               <Input
@@ -124,6 +114,7 @@ export default function RegisterPage() {
                 onChange={set("confirmPassword")}
                 error={errors.confirmPassword}
                 autoComplete="new-password"
+                showPasswordToggle
                 required
               />
 

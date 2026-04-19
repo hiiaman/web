@@ -64,6 +64,7 @@ export function LoginForm() {
         onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
         required
         autoComplete="current-password"
+        showPasswordToggle
       />
 
       {!isDev && (
