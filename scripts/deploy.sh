@@ -63,7 +63,7 @@ ok "Frontend built → $WEB_DIR/dist"
 
 # ── 4. Reload Nginx ───────────────────────────────────────────────────────────
 log "Reloading Nginx…"
-nginx -t && systemctl reload nginx
+sudo nginx -t && sudo systemctl reload nginx
 ok "Nginx reloaded."
 
 echo ""
