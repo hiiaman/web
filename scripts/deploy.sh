@@ -25,7 +25,7 @@ ok()   { echo -e "${GREEN}[   ok     ]${RESET} $*"; }
 warn() { echo -e "${YELLOW}[  warn    ]${RESET} $*"; }
 die()  { echo -e "${RED}[  error   ]${RESET} $*" >&2; exit 1; }
 
-WEB_DIR="/var/html/zommie/web"
+WEB_DIR="/var/html/zoomie/web"
 SKIP_PULL=false
 
 for arg in "$@"; do
