@@ -17,7 +17,7 @@ export default function MyPetsPage() {
   const { data: pets, isLoading } = useMyPets();
   const { mutate: deletePet } = useDeletePet();
   const { activePetId, setActivePetId } = usePetsStore();
-  const [deletingPet, setDeletingPet] = useState<{ id: number; name: string } | null>(null);
+  const [deletingPet, setDeletingPet] = useState<{ id: string; name: string } | null>(null);
 
   if (isLoading) return <LoadingSpinner />;
 
