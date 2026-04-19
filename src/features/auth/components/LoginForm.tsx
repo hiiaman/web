@@ -13,7 +13,8 @@ export function LoginForm() {
   const { t } = useTranslation();
   const { mutate: login, isPending, error } = useLogin();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const isDev = env.APP_ENV !== "production";
+  const [captchaToken, setCaptchaToken] = useState<string | null>(isDev ? "dev-bypass" : null);
   const turnstileRef = useRef<TurnstileInstance>(null);
 
   const parsedError = error ? parseApiError(error) : null;
@@ -37,8 +38,10 @@ export function LoginForm() {
       { ...form, captcha_token: captchaToken },
       {
         onError: () => {
-          turnstileRef.current?.reset();
-          setCaptchaToken(null);
+          if (!isDev) {
+            turnstileRef.current?.reset();
+            setCaptchaToken(null);
+          }
         },
       }
     );
@@ -63,14 +66,16 @@ export function LoginForm() {
         autoComplete="current-password"
       />
 
-      <Turnstile
-        ref={turnstileRef}
-        siteKey={env.TURNSTILE_SITE_KEY}
-        onSuccess={setCaptchaToken}
-        onExpire={() => setCaptchaToken(null)}
-        onError={() => setCaptchaToken(null)}
-        options={{ theme: "light" }}
-      />
+      {!isDev && (
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={env.TURNSTILE_SITE_KEY}
+          onSuccess={setCaptchaToken}
+          onExpire={() => setCaptchaToken(null)}
+          onError={() => setCaptchaToken(null)}
+          options={{ theme: "light" }}
+        />
+      )}
 
       {apiError && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{apiError}</p>
