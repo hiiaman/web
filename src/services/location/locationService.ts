@@ -30,8 +30,8 @@ export const locationService = {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => locationService.set(pos.coords.latitude, pos.coords.longitude),
-      () => { /* silently fall back to HCMC default */ },
-      { enableHighAccuracy: false, timeout: 10_000 },
+      (err) => console.warn("[Geolocation]", err.code, err.message),
+      { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
     );
   },
 };

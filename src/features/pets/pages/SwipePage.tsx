@@ -23,8 +23,8 @@ export default function SwipePage() {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-      () => {},
-      { enableHighAccuracy: false, timeout: 10_000 },
+      (err) => console.warn("[Geolocation]", err.code, err.message),
+      { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
     );
   }, []);
 

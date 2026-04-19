@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@shared/components/ui/Button";
-import { Input } from "@shared/components/ui/Input";
 import LoadingSpinner from "@shared/components/feedback/LoadingSpinner";
 import { timeAgo } from "@shared/utils/format";
 import { usePetsStore } from "@features/pets/store/pets.store";
@@ -27,7 +26,7 @@ export function ChatWindow({ matchId }: Props) {
 
   const handleSend = () => {
     const content = text.trim();
-    if (!content) return;
+    if (!content || isPending) return;
     send({ content }, { onSuccess: () => setText("") });
   };
 
@@ -61,15 +60,16 @@ export function ChatWindow({ matchId }: Props) {
       </div>
 
       {/* Input */}
-      <div className="border-t border-gray-100 p-4 flex gap-2">
-        <Input
+      <div className="border-t border-gray-100 p-4 flex items-end gap-2">
+        <textarea
+          rows={3}
           placeholder={t("chat.placeholder")}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-          className="flex-1"
+          className="flex-1 resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
         />
-        <Button type="button" onClick={handleSend} loading={isPending} disabled={!text.trim()}>
+        <Button type="button" onClick={handleSend} loading={isPending} disabled={!text.trim() || isPending}>
           {t("chat.send")}
         </Button>
       </div>
