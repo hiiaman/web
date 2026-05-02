@@ -103,12 +103,18 @@ export default function SwipePage() {
 
       {/* Location banner — shown only when action is needed from the user */}
       {geo.status === "loading" ? null : geo.status === "denied" ? (
-        <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          {geo.errorMessage}
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-red-50 px-4 py-3">
+          <div className="text-sm text-red-700">
+            <p>{geo.errorMessage}</p>
+            <p className="mt-0.5 text-xs text-red-500">{t("swipe.locationDeniedHint")}</p>
+          </div>
+          <Button size="sm" variant="secondary" onClick={requestLocation}>{t("swipe.retryLocation")}</Button>
         </div>
-      ) : geo.status === "timeout" ? (
+      ) : geo.status === "timeout" || geo.status === "unavailable" ? (
         <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-amber-50 px-4 py-3">
-          <span className="text-sm text-amber-700">{geo.errorMessage}</span>
+          <span className="text-sm text-amber-700">
+            {geo.errorMessage ?? t("swipe.locationUnavailable")}
+          </span>
           <Button size="sm" onClick={requestLocation}>{t("swipe.retryLocation")}</Button>
         </div>
       ) : geo.status === "idle" ? (

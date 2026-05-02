@@ -72,6 +72,8 @@ const vi = {
     locationBanner: "Cho phép vị trí để tìm thú cưng gần bạn",
     allowLocation: "Cho phép",
     retryLocation: "Thử lại",
+    locationUnavailable: "Không thể xác định vị trí của bạn.",
+    locationDeniedHint: "Bật vị trí trong Cài đặt, sau đó nhấn Thử lại.",
   },
   myPets: {
     title: "Thú cưng của tôi",

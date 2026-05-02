@@ -72,6 +72,8 @@ const en = {
     locationBanner: "Allow location to find pets near you",
     allowLocation: "Allow",
     retryLocation: "Retry",
+    locationUnavailable: "Could not determine your location.",
+    locationDeniedHint: "Enable location in Settings, then tap Retry.",
   },
   myPets: {
     title: "My Pets",
