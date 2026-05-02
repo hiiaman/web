@@ -9,6 +9,7 @@ import EmptyState from "@shared/components/feedback/EmptyState";
 import { usePetsStore } from "../store/pets.store";
 import { useCandidates } from "../hooks/useCandidates";
 import { useSwipe } from "../hooks/useSwipe";
+import { useGeolocation } from "../hooks/useGeolocation";
 import { SwipeCard } from "../components/SwipeCard";
 import type { PetCandidateResponse } from "../types/pets.types";
 
@@ -17,15 +18,15 @@ export default function SwipePage() {
   const { activePetId, locationMode, radiusKm, oppositeGender, setLocationMode, setRadiusKm } =
     usePetsStore();
 
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const { state: geo, requestLocation } = useGeolocation();
 
+  // Auto-request on mount — works silently if permission already granted.
+  // On iOS, if permission has NOT been granted yet, this call is ignored by Safari
+  // (no prompt shown). The location banner below provides the user-gesture button
+  // needed to trigger the iOS permission prompt for first-time visitors.
   useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-      (err) => console.warn("[Geolocation]", err.code, err.message),
-      { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
-    );
+    requestLocation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { data: candidates, isLoading, refetch } = useCandidates(
@@ -35,8 +36,8 @@ export default function SwipePage() {
       radius_km: radiusKm,
       opposite_gender: oppositeGender,
       limit: 10,
-      latitude: userLocation?.latitude,
-      longitude: userLocation?.longitude,
+      latitude: geo.status === "success" ? geo.latitude ?? undefined : undefined,
+      longitude: geo.status === "success" ? geo.longitude ?? undefined : undefined,
     }
   );
 
@@ -90,6 +91,28 @@ export default function SwipePage() {
 
   return (
     <PageWrapper title={t("swipe.title")}>
+
+      {/* Location banner — shown only when action is needed from the user */}
+      {geo.status === "idle" || geo.status === "loading" ? null : geo.status === "denied" ? (
+        <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+          {geo.errorMessage}
+        </div>
+      ) : geo.status === "timeout" ? (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-amber-50 px-4 py-3">
+          <span className="text-sm text-amber-700">{geo.errorMessage}</span>
+          <Button size="sm" onClick={requestLocation}>{t("swipe.retryLocation")}</Button>
+        </div>
+      ) : (geo.status === "idle") ? (
+        // First-time visitors: user-gesture button required for iOS permission prompt
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-brand-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-brand-700">
+            <span className="text-lg">📍</span>
+            <span>{t("swipe.locationBanner")}</span>
+          </div>
+          <Button size="sm" onClick={requestLocation}>{t("swipe.allowLocation")}</Button>
+        </div>
+      ) : null}
+
       {/* Filter bar */}
       <div className="mb-6 flex flex-wrap gap-3">
         <div className="flex gap-1 rounded-lg bg-gray-100 p-1">

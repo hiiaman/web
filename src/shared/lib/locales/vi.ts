@@ -71,6 +71,7 @@ const vi = {
     keepSwiping: "Tiếp tục vuốt",
     locationBanner: "Cho phép vị trí để tìm thú cưng gần bạn",
     allowLocation: "Cho phép",
+    retryLocation: "Thử lại",
   },
   myPets: {
     title: "Thú cưng của tôi",

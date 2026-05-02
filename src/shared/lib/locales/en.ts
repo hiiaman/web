@@ -71,6 +71,7 @@ const en = {
     keepSwiping: "Keep swiping",
     locationBanner: "Allow location to find pets near you",
     allowLocation: "Allow",
+    retryLocation: "Retry",
   },
   myPets: {
     title: "My Pets",
