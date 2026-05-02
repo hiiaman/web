@@ -93,7 +93,7 @@ export default function SwipePage() {
     <PageWrapper title={t("swipe.title")}>
 
       {/* Location banner — shown only when action is needed from the user */}
-      {geo.status === "idle" || geo.status === "loading" ? null : geo.status === "denied" ? (
+      {geo.status === "loading" ? null : geo.status === "denied" ? (
         <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
           {geo.errorMessage}
         </div>
@@ -102,7 +102,7 @@ export default function SwipePage() {
           <span className="text-sm text-amber-700">{geo.errorMessage}</span>
           <Button size="sm" onClick={requestLocation}>{t("swipe.retryLocation")}</Button>
         </div>
-      ) : (geo.status === "idle") ? (
+      ) : geo.status === "idle" ? (
         // First-time visitors: user-gesture button required for iOS permission prompt
         <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-brand-50 px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-brand-700">
