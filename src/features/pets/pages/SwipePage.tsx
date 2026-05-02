@@ -20,12 +20,21 @@ export default function SwipePage() {
 
   const { state: geo, requestLocation } = useGeolocation();
 
-  // Auto-request on mount — works silently if permission already granted.
-  // On iOS, if permission has NOT been granted yet, this call is ignored by Safari
-  // (no prompt shown). The location banner below provides the user-gesture button
-  // needed to trigger the iOS permission prompt for first-time visitors.
+  // Auto-request only when permission is already granted.
+  // On iOS Safari, calling watchPosition without a user gesture for first-time
+  // users silently queues the request (no prompt shown) and fires a TIMEOUT after
+  // 10 s — hiding the "idle" banner the user needs to tap. Using the Permissions
+  // API to check first means we only bypass the banner when it is safe to do so.
+  // Browsers without the Permissions API (or where it is unreliable) fall through
+  // to the idle state so the banner is always shown.
   useEffect(() => {
-    requestLocation();
+    if (!navigator.permissions) return;
+    navigator.permissions
+      .query({ name: "geolocation" as PermissionName })
+      .then((result) => {
+        if (result.state === "granted") requestLocation();
+      })
+      .catch(() => { /* ignore — show idle banner */ });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
